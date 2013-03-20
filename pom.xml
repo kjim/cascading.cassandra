@@ -16,7 +16,7 @@
         <dependency>
             <groupId>org.apache.cassandra</groupId>
             <artifactId>cassandra-all</artifactId>
-            <version>1.0.8</version>
+            <version>0.7.10</version>
         </dependency>
         <dependency>
             <groupId>cascading</groupId>
@@ -31,7 +31,7 @@
         <dependency>
             <groupId>me.prettyprint</groupId>
             <artifactId>hector-core</artifactId>
-            <version>1.0-3</version>
+            <version>0.7.0-31</version>
         </dependency>
     </dependencies>
     <repositories>
