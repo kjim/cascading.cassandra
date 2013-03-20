@@ -7,7 +7,6 @@ import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 import me.prettyprint.cassandra.serializers.TypeInferringSerializer;
 import org.apache.cassandra.db.IColumn;
-import org.apache.cassandra.hadoop.ColumnFamilyOutputFormat;
 import org.apache.cassandra.thrift.Column;
 import org.apache.cassandra.thrift.ColumnOrSuperColumn;
 import org.apache.cassandra.thrift.Mutation;
@@ -17,6 +16,7 @@ import org.apache.commons.lang.NotImplementedException;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.mapred.JobConf;
 import org.apache.hadoop.mapred.OutputCollector;
+import org.pingles.cascading.cassandra.hadoop.ColumnFamilyOutputFormat;
 import org.pingles.cascading.cassandra.hadoop.ConfigHelper;
 import org.slf4j.LoggerFactory;
 
