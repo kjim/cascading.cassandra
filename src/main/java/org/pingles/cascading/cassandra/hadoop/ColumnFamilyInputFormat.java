@@ -3,7 +3,6 @@ package org.pingles.cascading.cassandra.hadoop;
 import org.apache.cassandra.db.IColumn;
 import org.apache.cassandra.dht.IPartitioner;
 import org.apache.cassandra.dht.Range;
-import org.apache.cassandra.hadoop.ConfigHelper;
 import org.apache.cassandra.thrift.Cassandra;
 import org.apache.cassandra.thrift.InvalidRequestException;
 import org.apache.cassandra.thrift.KeyRange;

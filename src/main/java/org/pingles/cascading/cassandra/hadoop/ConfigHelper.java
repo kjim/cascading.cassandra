@@ -1,4 +1,4 @@
-package org.apache.cassandra.hadoop;
+package org.pingles.cascading.cassandra.hadoop;
 /*
  * 
  * Licensed to the Apache Software Foundation (ASF) under one

@@ -4,12 +4,12 @@ import cascading.scheme.Scheme;
 import cascading.tap.Tap;
 import me.prettyprint.cassandra.serializers.TypeInferringSerializer;
 import org.apache.cassandra.hadoop.ColumnFamilyOutputFormat;
-import org.apache.cassandra.hadoop.ConfigHelper;
 import org.apache.cassandra.thrift.Column;
 import org.apache.cassandra.thrift.ColumnOrSuperColumn;
 import org.apache.cassandra.thrift.Mutation;
 import org.apache.hadoop.io.BytesWritable;
 import org.apache.hadoop.mapred.JobConf;
+import org.pingles.cascading.cassandra.hadoop.ConfigHelper;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
