@@ -12,32 +12,6 @@ The project can be built using [Maven](http://maven.apache.org) and installed in
 
 Alternatively, there's a snapshot available from [Conjars](http://conjars.org/cascading.pingles/cascading.cassandra).
 
-### Leiningen
-
-    [cascading.cassandra/cascading.cassandra "0.0.5"]
-    
-and add the repository into your `project.clj` with
-
-    :repositories {"conjars" "http://conjars.org/repo"}
-
-### Maven
-
-    <dependency>
-      <groupId>cascading.cassandra</groupId>
-      <artifactId>cascading.cassandra</artifactId>
-      <version>0.0.5</version>
-    </dependency>
-
-If you haven't already added it you'll need to add the Conjars repository
-
-    <repositories>
-      <repository>
-        <id>conjars</id>
-        <url>http://conjars.org/repo</url>
-      </repository>
-    </repositories>
-
-
 ## Restrictions
 
 This is very much an early Work-in-Progress and all contributions are welcome. It only supports regular column families currently (no super columns or counter columns yet).
