@@ -17,21 +17,17 @@ saved_caches_directory: ./tmp/cassandra/saved_caches
 commitlog_sync: periodic
 commitlog_sync_period_in_ms: 10000
 
-seed_provider:
-    # Addresses of hosts that are deemed contact points. 
-    # Cassandra nodes use this list of hosts to find each other and learn
-    # the topology of the ring.  You must change this if you are running
-    # multiple nodes!
-    - class_name: org.apache.cassandra.locator.SimpleSeedProvider
-      parameters:
-          # seeds is actually a comma-delimited list of addresses.
-          # Ex: "<ip1>,<ip2>,<ip3>"
-          - seeds: "127.0.0.1"
-
 flush_largest_memtables_at: 0.75
 
 reduce_cache_sizes_at: 0.85
 reduce_cache_capacity_to: 0.6
+
+# Addresses of hosts that are deemed contact points.
+# Cassandra nodes use this list of hosts to find each other and learn
+# the topology of the ring.  You must change this if you are running
+# multiple nodes!
+seeds:
+    - 127.0.0.1
 
 concurrent_reads: 32
 concurrent_writes: 32
@@ -46,8 +42,6 @@ rpc_port: 9960
 
 rpc_keepalive: true
 
-rpc_server_type: sync
-
 thrift_framed_transport_size_in_mb: 15
 
 thrift_max_message_length_in_mb: 16
@@ -56,7 +50,6 @@ snapshot_before_compaction: false
 column_index_size_in_kb: 64
 in_memory_compaction_limit_in_mb: 64
 
-compaction_throughput_mb_per_sec: 16
 compaction_preheat_key_cache: true
 
 rpc_timeout_in_ms: 10000
@@ -71,10 +64,3 @@ dynamic_snitch_badness_threshold: 0.1
 request_scheduler: org.apache.cassandra.scheduler.NoScheduler
 
 index_interval: 128
-
-encryption_options:
-    internode_encryption: none
-    keystore: conf/.keystore
-    keystore_password: cassandra
-    truststore: conf/.truststore
-    truststore_password: cassandra

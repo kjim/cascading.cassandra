@@ -2,7 +2,6 @@ package org.pingles.cascading.cassandra;
 
 import org.apache.cassandra.thrift.InvalidRequestException;
 import org.apache.cassandra.thrift.NotFoundException;
-import org.apache.cassandra.thrift.SchemaDisagreementException;
 import org.apache.thrift.TException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,7 @@ public class CassandraTestUtil {
     private static final Logger LOGGER = LoggerFactory.getLogger(CassandraFlowTest.class);
     private static final String CASSANDRA_YAML = "./src/test/resources/cassandra.yaml";
 
-    public static void ensureKeyspace(String name) throws TException, InterruptedException, InvalidRequestException, SchemaDisagreementException {
+    public static void ensureKeyspace(String name) throws TException, InterruptedException, InvalidRequestException {
         CassandraClient client = new CassandraClient(getRpcHost(), getRpcPort());
         client.open();
         if (!client.keyspaceExists(name)) {
@@ -26,7 +25,7 @@ public class CassandraTestUtil {
         client.close();
     }
 
-    public static void ensureColumnFamily(String keyspace, String columnFamily) throws TException, InterruptedException, NotFoundException, InvalidRequestException, SchemaDisagreementException {
+    public static void ensureColumnFamily(String keyspace, String columnFamily) throws TException, InterruptedException, NotFoundException, InvalidRequestException {
         CassandraClient client = new CassandraClient(getRpcHost(), getRpcPort());
         client.open();
         if (!client.columnFamilyExists(keyspace, columnFamily)) {

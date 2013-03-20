@@ -33,7 +33,7 @@ public abstract class CassandraScheme extends Scheme {
 
     protected Mutation createColumnPutMutation(
             ByteBuffer name, ByteBuffer value) {
-        Column column = new Column(name);
+        Column column = new Column();
         column.setName(name);
         column.setValue(value);
         column.setTimestamp(System.currentTimeMillis());

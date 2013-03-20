@@ -10,7 +10,6 @@ import org.apache.cassandra.thrift.ConsistencyLevel;
 import org.apache.cassandra.thrift.InvalidRequestException;
 import org.apache.cassandra.thrift.KsDef;
 import org.apache.cassandra.thrift.NotFoundException;
-import org.apache.cassandra.thrift.SchemaDisagreementException;
 import org.apache.cassandra.thrift.TimedOutException;
 import org.apache.cassandra.thrift.UnavailableException;
 import org.apache.thrift.TException;
@@ -24,7 +23,6 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 public class CassandraClient {
@@ -47,13 +45,10 @@ public class CassandraClient {
         this.keyspaceName = keyspaceName;
     }
 
-    public String createKeyspace(String keyspaceName) throws TException, SchemaDisagreementException, InvalidRequestException {
+    public String createKeyspace(String keyspaceName) throws TException, InvalidRequestException {
         List<CfDef> columnFamilyDefs = new ArrayList<CfDef>();
 
-        KsDef ksDef = new KsDef(keyspaceName, "org.apache.cassandra.locator.SimpleStrategy", columnFamilyDefs);
-        ksDef.strategy_options = new HashMap<String, String>() {{
-            put("replication_factor", "1");
-        }};
+        KsDef ksDef = new KsDef(keyspaceName, "org.apache.cassandra.locator.SimpleStrategy", 1, columnFamilyDefs);
 
         client.send_system_add_keyspace(ksDef);
         return this.client.recv_system_add_keyspace();
@@ -106,7 +101,7 @@ public class CassandraClient {
         return ksDef.cf_defs;
     }
 
-    public String createColumnFamily(String keyspace, String name) throws TException, SchemaDisagreementException, InvalidRequestException {
+    public String createColumnFamily(String keyspace, String name) throws TException, InvalidRequestException {
         CfDef cfDef = new CfDef();
         cfDef.name = name;
         cfDef.keyspace = keyspace;
@@ -129,7 +124,8 @@ public class CassandraClient {
 
     public void put(String columnFamilyName, ByteBuffer key, ByteBuffer name, ByteBuffer value) throws TException, TimedOutException, InvalidRequestException, UnavailableException {
         ColumnParent columnParent = new ColumnParent(columnFamilyName);
-        Column column = new Column(name);
+        Column column = new Column();
+        column.setName(name);
         column.setTimestamp(System.currentTimeMillis());
         column.setValue(value);
 

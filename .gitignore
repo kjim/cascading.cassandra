@@ -6,3 +6,4 @@ cascading.cassandra.ipr
 .project
 .classpath
 .settings
+*~

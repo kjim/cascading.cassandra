@@ -4,7 +4,6 @@ import com.google.common.collect.AbstractIterator;
 import org.apache.cassandra.config.ConfigurationException;
 import org.apache.cassandra.db.IColumn;
 import org.apache.cassandra.db.marshal.AbstractType;
-import org.apache.cassandra.db.marshal.TypeParser;
 import org.apache.cassandra.dht.IPartitioner;
 import org.apache.cassandra.hadoop.ConfigHelper;
 import org.apache.cassandra.thrift.AuthenticationException;
@@ -16,8 +15,6 @@ import org.apache.cassandra.thrift.Column;
 import org.apache.cassandra.thrift.ColumnOrSuperColumn;
 import org.apache.cassandra.thrift.ColumnParent;
 import org.apache.cassandra.thrift.ConsistencyLevel;
-import org.apache.cassandra.thrift.CounterColumn;
-import org.apache.cassandra.thrift.CounterSuperColumn;
 import org.apache.cassandra.thrift.InvalidRequestException;
 import org.apache.cassandra.thrift.KeyRange;
 import org.apache.cassandra.thrift.KeySlice;
@@ -188,8 +185,8 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
                 int idx = cfnames.indexOf(columnFamily);
                 CfDef cf_def = ks_def.cf_defs.get(idx);
 
-                comparator = TypeParser.parse(cf_def.comparator_type);
-                subComparator = cf_def.subcomparator_type == null ? null : TypeParser.parse(cf_def.subcomparator_type);
+                comparator = FBUtilities.getComparator(cf_def.comparator_type);
+                subComparator = cf_def.subcomparator_type == null ? null : FBUtilities.getComparator(cf_def.subcomparator_type);
             } catch (ConfigurationException e) {
                 throw new RuntimeException("unable to load sub/comparator", e);
             } catch (TException e) {
@@ -200,7 +197,7 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
         }
 
         private void maybeInit() {
-            // check if we need another batch
+            // check if we need another batch 
             if (rows != null && i >= rows.size())
                 rows = null;
 
@@ -237,7 +234,7 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
                             rowsIterator.remove();
                 }
 
-                // reset to iterate through the new batch
+                // reset to iterate through this new batch
                 i = 0;
 
                 // prepare for the next slice to be read
@@ -254,6 +251,7 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
             return totalRead;
         }
 
+        @Override
         protected Pair<ByteBuffer, SortedMap<ByteBuffer, IColumn>> computeNext() {
             maybeInit();
             if (rows == null)
@@ -270,13 +268,8 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
         }
 
         private IColumn unthriftify(ColumnOrSuperColumn cosc) {
-            if (cosc.counter_column != null)
-                return unthriftifyCounter(cosc.counter_column);
-            if (cosc.counter_super_column != null)
-                return unthriftifySuperCounter(cosc.counter_super_column);
-            if (cosc.super_column != null)
+            if (cosc.column == null)
                 return unthriftifySuper(cosc.super_column);
-            assert cosc.column != null;
             return unthriftifySimple(cosc.column);
         }
 
@@ -290,19 +283,6 @@ public class ColumnFamilyRecordReader implements RecordReader<ByteBuffer, Sorted
 
         private IColumn unthriftifySimple(Column column) {
             return new org.apache.cassandra.db.Column(column.name, column.value, column.timestamp);
-        }
-
-        private IColumn unthriftifyCounter(CounterColumn column) {
-            //CounterColumns read the nodeID from the System table, so need the StorageService running and access
-            //to cassandra.yaml. To avoid a Hadoop needing access to yaml return a regular Column.
-            return new org.apache.cassandra.db.Column(column.name, ByteBufferUtil.bytes(column.value), 0);
-        }
-
-        private IColumn unthriftifySuperCounter(CounterSuperColumn superColumn) {
-            org.apache.cassandra.db.SuperColumn sc = new org.apache.cassandra.db.SuperColumn(superColumn.name, subComparator);
-            for (CounterColumn column : superColumn.columns)
-                sc.addColumn(unthriftifyCounter(column));
-            return sc;
         }
     }
 
