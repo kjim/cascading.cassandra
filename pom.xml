@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>cascading.cassandra</groupId>
-    <artifactId>cascading.cassandra</artifactId>
+    <groupId>cascading.cassandra07</groupId>
+    <artifactId>cascading.cassandra07</artifactId>
     <version>0.0.5</version>
     <dependencies>
         <dependency>
