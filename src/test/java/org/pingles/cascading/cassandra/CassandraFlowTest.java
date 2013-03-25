@@ -136,7 +136,8 @@ public class CassandraFlowTest {
         Tap source = new CassandraTap(getRpcHost(), getRpcPort(), keyspaceName, columnFamilyName, scheme);
         Tap sink = new Lfs(new TextLine(), "./tmp/test/cassandraAsSourceOutput.txt", SinkMode.REPLACE);
         Pipe copyPipe = new Each("read", new ByteBufferToString());
-        Flow flow = new FlowConnector(properties).connect(source, sink, copyPipe);
+        Pipe sortPipe = new GroupBy("sort", copyPipe, Fields.FIRST);
+        Flow flow = new FlowConnector(properties).connect(source, sink, sortPipe);
         flow.complete();
 
         List<String> outputContents = readLines("./tmp/test/cassandraAsSourceOutput.txt/part-00000");
