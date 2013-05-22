@@ -303,10 +303,18 @@ public class ConfigHelper
     {
         return conf.get(READ_CONSISTENCY_LEVEL, "ONE");
     }
+    
+    public static void setReadConsistencyLevel(Configuration conf, String consistencyLevel) {
+        conf.set(READ_CONSISTENCY_LEVEL, consistencyLevel);
+    }
 
     public static String getWriteConsistencyLevel(Configuration conf)
     {
         return conf.get(WRITE_CONSISTENCY_LEVEL, "ONE");
+    }
+    
+    public static void setWriteConsistencyLevel(Configuration conf, String consistencyLevel) {
+        conf.set(WRITE_CONSISTENCY_LEVEL, consistencyLevel);
     }
 
     public static int getRpcPort(Configuration conf)
